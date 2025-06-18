@@ -4,6 +4,7 @@ const { default: mongoose } = require("mongoose");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Course = require("../model/Course");
+const Student = require("../model/Student");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -46,7 +47,6 @@ router.post("/add-course", checkAuth, (req, res) => {
 });
 
 //get all courses for any user
-
 router.get("/all-courses", checkAuth, (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const verify = jwt.verify(token, "sbs online classes 123");
@@ -69,15 +69,18 @@ router.get("/all-courses", checkAuth, (req, res) => {
 });
 
 //get one course for any user
-
 router.get("/course-detail/:id", checkAuth, (req, res) => {
   Course.findById(req.params.id)
     .select(
       "_id uId courseName price description startingDate endDate imageUrl imageId"
     )
     .then((result) => {
-      res.status(200).json({
-        courses: result,
+      // console.log(result);
+      Student.find({ courseId: req.params.id }).then((students) => {
+        res.status(200).json({
+          course: result,
+          studentList: students,
+        });
       });
     })
     .catch((err) => {
@@ -89,7 +92,6 @@ router.get("/course-detail/:id", checkAuth, (req, res) => {
 });
 
 //delete course
-
 router.delete("/:id", checkAuth, (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const verify = jwt.verify(token, "sbs online classes 123");
@@ -188,6 +190,27 @@ router.put("/:id", checkAuth, (req, res) => {
         });
     }
   });
+});
+
+//get latest 5 courses data
+router.get("/latest-courses", checkAuth, (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const verify = jwt.verify(token, "sbs online classes 123");
+  // console.log(verify.uId);
+
+  Course.find({ uId: verify.uId })
+    .sort({ $natural: -1 })
+    .limit(5)
+    .then((result) => {
+      res.status(200).json({
+        courses: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
 });
 
 module.exports = router;
