@@ -33,9 +33,9 @@ router.post("/signup", (req, res) => {
         }
         const newUser = new User({
           _id: new mongoose.Types.ObjectId(),
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          fullName: req.body.fullName,
           email: req.body.email,
+          phone: req.body.phone,
           password: hash,
           imageUrl: result.secure_url,
           imageId: result.public_id,
@@ -44,7 +44,7 @@ router.post("/signup", (req, res) => {
           .save()
           .then((result) => {
             res.status(200).json({
-              newStudent: result,
+              newUser: result,
             });
           })
           .catch((err) => {
@@ -76,9 +76,9 @@ router.post("/login", (req, res) => {
 
       const token = jwt.sign(
         {
+          fullNameName: users[0].fullName,
           email: users[0].email,
-          firstName: users[0].firstName,
-          lastName: users[0].lastName,
+          phone: users[0].phone,
           uId: users[0]._id,
         },
         "sbs online classes 123",
@@ -89,9 +89,9 @@ router.post("/login", (req, res) => {
 
       res.status(200).json({
         _id: users[0]._id,
-        firstName: users[0].firstName,
-        lastName: users[0].lastName,
+        fullNameName: users[0].fullName,
         email: users[0].email,
+        phone: users[0].phone,
         imageUrl: users[0].imageUrl,
         imageId: users[0].imageId,
         token: token,

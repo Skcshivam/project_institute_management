@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const fileUpload = require("express-fileupload");
 
 const userRoute = require("./routes/user");
@@ -21,6 +22,7 @@ mongoose
   });
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use(
   fileUpload({
