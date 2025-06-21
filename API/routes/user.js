@@ -62,12 +62,14 @@ router.post("/signup", (req, res) => {
 router.post("/login", (req, res) => {
   User.find({ email: req.body.email }).then((users) => {
     console.log(User[0]);
-    if (User.length == 0) {
+    if (users.length == 0) {
       return res.status(500).json({
         msg: "email not register",
       });
     }
-    bcrypt.compare(req.body.password, users[0].password, (err, result) => {
+
+    const user = users[0];
+    bcrypt.compare(req.body.password, user.password, (err, result) => {
       if (!result) {
         return res.status(500).json({
           error: "password matching failed ...",
@@ -76,7 +78,7 @@ router.post("/login", (req, res) => {
 
       const token = jwt.sign(
         {
-          fullNameName: users[0].fullName,
+          fullName: users[0].fullName,
           email: users[0].email,
           phone: users[0].phone,
           uId: users[0]._id,
@@ -89,7 +91,7 @@ router.post("/login", (req, res) => {
 
       res.status(200).json({
         _id: users[0]._id,
-        fullNameName: users[0].fullName,
+        fullName: users[0].fullName,
         email: users[0].email,
         phone: users[0].phone,
         imageUrl: users[0].imageUrl,
