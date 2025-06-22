@@ -22,8 +22,13 @@ function Login() {
       })
       .then((res) => {
         setLoading(false);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("fullName", res.data.fullName);
+        localStorage.setItem("imageUrl", res.data.imageUrl);
+        localStorage.setItem("imageId", res.data.imageId);
+        localStorage.setItem("email", res.data.email);
         Navigate("/dashboard");
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err) => {
         setLoading(false);
@@ -44,7 +49,7 @@ function Login() {
         </div>
 
         <div className="signup-right">
-          <form onSubmit={submitHandler} className="signup-form">
+          <form onSubmit={submitHandler} className="form">
             <h1>Login with your Account</h1>
             <input
               required

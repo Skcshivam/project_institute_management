@@ -57,7 +57,7 @@ function Signup() {
         </div>
 
         <div className="signup-right">
-          <form onSubmit={submitHandler} className="signup-form">
+          <form onSubmit={submitHandler} className="form">
             <h1>Create your Account</h1>
             <input
               required
