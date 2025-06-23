@@ -11,6 +11,7 @@ import AddCourses from "./components/AddCourses";
 import AddStudent from "./components/AddStudent";
 import CollectFee from "./components/CollectFee";
 import PaymentHistory from "./components/PaymentHistory";
+import CourseDetail from "./components/CourseDetail";
 
 const myRouter = createBrowserRouter([
   { path: "/", element: <Signup /> },
@@ -28,6 +29,7 @@ const myRouter = createBrowserRouter([
       { path: "add-students", Component: AddStudent },
       { path: "collect-fee", Component: CollectFee },
       { path: "payment-history", Component: PaymentHistory },
+      { path: "course-detail/:id", Component: CourseDetail },
     ],
   },
 ]);

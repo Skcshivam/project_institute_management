@@ -99,7 +99,9 @@ function Signup() {
               {isLoading && <i className="fa-solid fa-spinner fa-spin"></i>}
               Submit
             </button>
-            <Link className="link" to="/login">Login with your account</Link>
+            <Link className="link" to="/login">
+              Login with your account
+            </Link>
           </form>
         </div>
       </div>
