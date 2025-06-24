@@ -239,7 +239,8 @@ select {
   flex-direction: row;
   gap: 20px;
   flex-wrap: wrap;
-  justify-content: space-between;
+  /* justify-content: space-evenly; */
+  overflow-y: auto;
 }
 .course-box {
   width: 32%;
@@ -269,4 +270,60 @@ select {
 .course-price {
   font-size: 14px;
   text-align: center;
+}
+
+/* ----------------- course Detial ------------------- */
+.course-detail-main-wrapper {
+  background-color: #eee;
+  height: 80vh;
+  padding: 20px;
+}
+
+.course-detail-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+  text-transform: capitalize;
+}
+
+.course-detail-wrapper img {
+  border-radius: 10px;
+  width: 30%;
+}
+
+.studentlist-container {
+  margin-top: 30px;
+  width: 100%;
+  height: 50vh;
+  background-color: white;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-profile-pic {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 5px 5px 10px;
+  margin-left: 15px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 20px;
+}
+
+tr:hover {
+  background-color: #eee;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+th{
+  color :#f65164
 }
