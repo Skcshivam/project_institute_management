@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function AddCourses() {
@@ -14,6 +14,19 @@ function AddCourses() {
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setLoading] = useState(false);
   const Navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state) {
+      console.log(location.state.course);
+      setCourseName(location.state.course.courseName);
+      setPrice(location.state.course.price);
+      setDescription(location.state.course.description);
+      setStartingDate(location.state.course.startingDate);
+      setEndDate(location.state.course.endDate);
+      setImageUrl(location.state.course.imageUrl);
+    }
+  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -24,25 +37,51 @@ function AddCourses() {
     formData.append("description", description);
     formData.append("startingDate", startingDate);
     formData.append("endDate", endDate);
-    formData.append("image", image);
+    if (image) {
+      formData.append("image", image);
+    }
 
-    axios
-      .post("http://localhost:4200/course/add-course", formData, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        setLoading(false);
-        console.log(res.data);
-        toast.success("New course added.");
-        Navigate("/dashboard/courses");
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.error(err);
-        toast.error("Something went wrong...");
-      });
+    if (location.state) {
+      axios
+        .put(
+          "http://localhost:4200/course/" + location.state.course._id,
+          formData,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          setLoading(false);
+          console.log(res.data);
+          toast.success("course updated susscessfully.");
+          Navigate("/dashboard/course-detail/" + location.state.course._id);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+          toast.error("Something went wrong...");
+        });
+    } else {
+      axios
+        .post("http://localhost:4200/course/add-course", formData, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+          console.log(res.data);
+          toast.success("New course added.");
+          Navigate("/dashboard/courses");
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+          toast.error("Something went wrong...");
+        });
+    }
   };
 
   const fileHandler = (e) => {
@@ -53,7 +92,9 @@ function AddCourses() {
   return (
     <div>
       <form onSubmit={submitHandler} className="form">
+        <h1>{location.state ? "Edit course" : "Add New Course"}</h1>
         <input
+          value={courseName}
           required
           onChange={(e) => {
             setCourseName(e.target.value);
@@ -62,6 +103,7 @@ function AddCourses() {
           type="text"
         />
         <input
+          value={price}
           required
           onChange={(e) => {
             setPrice(e.target.value);
@@ -71,6 +113,7 @@ function AddCourses() {
         />
         <input
           required
+          value={description}
           onChange={(e) => {
             setDescription(e.target.value);
           }}
@@ -79,6 +122,7 @@ function AddCourses() {
         />
         <input
           required
+          value={startingDate}
           onChange={(e) => {
             setStartingDate(e.target.value);
           }}
@@ -87,13 +131,19 @@ function AddCourses() {
         />
         <input
           required
+          value={endDate}
           onChange={(e) => {
             setEndDate(e.target.value);
           }}
           placeholder="End Date (DD-MM-YY)"
           type="text"
         />
-        <input required onChange={fileHandler} type="file" />
+        <input
+          required={!location.state}
+          onChange={fileHandler}
+          type="file"
+          // value={setImageUrl}
+        />
         {imageUrl && (
           <img alt="your logo" className="your-logo" src={imageUrl} />
         )}

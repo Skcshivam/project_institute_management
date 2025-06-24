@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function CourseDetail() {
   const params = useParams();
   const [course, setCourse] = useState(null);
   const [studentList, setStudentList] = useState([]);
+
+  const Navigate = useNavigate();
 
   useEffect(() => {
     getCourseDetail();
@@ -37,13 +39,29 @@ function CourseDetail() {
         <div>
           <div className="course-detail-wrapper">
             <img alt="course thumbnail" src={course.imageUrl} />
-            <div>
+            <div className="course-detail-text">
               <h2>{course.courseName}</h2>
               <p>Price :- {course.price}</p>
               <p>starting Date :- {course.startingDate}</p>
               <p>end Date :- {course.endDate}</p>
             </div>
-            <p>{course.description}</p>
+            <div className="course-description-box">
+              <div className="btn-container">
+                <button
+                  className="primary-btn"
+                  onClick={() => {
+                    Navigate("/dashboard/add-course", { state: { course } });
+                  }}
+                >
+                  Edit
+                </button>
+                <button className="secondary-btn">Delete</button>
+              </div>
+              <h3>Course description</h3>
+              <div className="course-description-container">
+                <p>{course.description}</p>
+              </div>
+            </div>
           </div>
 
           {studentList && studentList.length > 0 && (
@@ -59,7 +77,7 @@ function CourseDetail() {
                 </thead>
                 <tbody>
                   {studentList.map((student) => (
-                    <tr className="student-row">
+                    <tr key={student._id} className="student-row">
                       <td>
                         <img
                           className="student-profile-pic"

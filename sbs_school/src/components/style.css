@@ -239,7 +239,6 @@ select {
   flex-direction: row;
   gap: 20px;
   flex-wrap: wrap;
-  /* justify-content: space-evenly; */
   overflow-y: auto;
 }
 .course-box {
@@ -284,19 +283,31 @@ select {
   flex-direction: row;
   gap: 10%;
   text-transform: capitalize;
+  height: 27vh;
 }
 
 .course-detail-wrapper img {
   border-radius: 10px;
   width: 30%;
+  height: 25vh;
 }
-
+.course-detail-text {
+  width: 20%;
+}
 .studentlist-container {
   margin-top: 30px;
   width: 100%;
   height: 50vh;
   background-color: white;
   overflow-y: auto;
+}
+.course-description-box {
+  width: 30%;
+}
+.course-description-container {
+  overflow: auto;
+  height: 20vh;
+  width: 100%;
 }
 
 table {
@@ -324,6 +335,32 @@ tr:hover {
   transition: 0.5s;
 }
 
-th{
-  color :#f65164
+th {
+  color: #f65164;
+}
+
+.students-container {
+  height: 80vh;
+  width: 100%;
+}
+
+.primary-btn {
+  background-color: #7033ff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background-color: #f65164;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-container {
+  display: flex;
+  gap: 10px;
 }
