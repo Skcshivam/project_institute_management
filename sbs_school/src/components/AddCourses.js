@@ -25,8 +25,16 @@ function AddCourses() {
       setStartingDate(location.state.course.startingDate);
       setEndDate(location.state.course.endDate);
       setImageUrl(location.state.course.imageUrl);
+    } else {
+      console.log("");
+      setCourseName("");
+      setPrice("");
+      setDescription("");
+      setStartingDate("");
+      setEndDate("");
+      setImageUrl("");
     }
-  }, []);
+  }, [location]);
 
   const submitHandler = (e) => {
     e.preventDefault();

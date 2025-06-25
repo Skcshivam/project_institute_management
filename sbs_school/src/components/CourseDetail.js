@@ -50,7 +50,9 @@ function CourseDetail() {
                 <button
                   className="primary-btn"
                   onClick={() => {
-                    Navigate("/dashboard/add-course", { state: { course } });
+                    Navigate("/dashboard/update-course/" + course._id, {
+                      state: { course },
+                    });
                   }}
                 >
                   Edit
@@ -77,7 +79,13 @@ function CourseDetail() {
                 </thead>
                 <tbody>
                   {studentList.map((student) => (
-                    <tr key={student._id} className="student-row">
+                    <tr
+                      onClick={() => {
+                        Navigate("/dashboard/student-detail/" + student._id);
+                      }}
+                      key={student._id}
+                      className="student-row"
+                    >
                       <td>
                         <img
                           className="student-profile-pic"

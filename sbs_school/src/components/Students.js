@@ -40,7 +40,7 @@ function Students() {
             </thead>
             <tbody>
               {studentList.map((student) => (
-                <tr className="student-row">
+                <tr className="student-row" key={student._id}>
                   <td>
                     <img
                       className="student-profile-pic"
