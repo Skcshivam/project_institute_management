@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function AddStudent() {
@@ -16,10 +16,26 @@ function AddStudent() {
   const [courseList, setCourseList] = useState([]);
 
   const Navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     getCourse();
-  }, []);
+    if (location.state) {
+      setFullName(location.state.student.fullName);
+      setPhone(location.state.student.phone);
+      setEmail(location.state.student.email);
+      setAddress(location.state.student.address);
+      setCourseId(location.state.student.courseId);
+      setImageUrl(location.state.student.imageUrl);
+    } else {
+      setFullName("");
+      setPhone("");
+      setEmail("");
+      setAddress("");
+      setCourseId("");
+      setImageUrl("");
+    }
+  }, [location]);
 
   const getCourse = () => {
     axios
@@ -51,7 +67,47 @@ function AddStudent() {
     formData.append("email", email);
     formData.append("address", address);
     formData.append("courseId", courseId);
-    formData.append("image", image);
+    if (image) {
+      formData.append("image", image);
+    }
+
+    if (location.state) {
+      axios
+        .put(
+          "http://localhost:4200/student/" + location.state.student._id,
+          formData,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          setLoading(false);
+          toast.success("Student Detail updated.");
+          Navigate("/dashboard/student-detail/" + location.state.student._id);
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast.error("Something went wrong...");
+        });
+    } else {
+      axios
+        .post("http://localhost:4200/student/add-student", formData, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+          toast.success("Student added successfully.");
+          Navigate("/dashboard/courses");
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast.error("Something went wrong...");
+        });
+    }
 
     setLoading(true);
 
@@ -77,32 +133,38 @@ function AddStudent() {
   return (
     <div>
       <form onSubmit={submitHandler} className="form">
-        <h1>Add new Student</h1>
+        <h1>{location.state ? "Edit studentDetails" : "Add new Student"}</h1>
         <input
+          value={fullName}
           onChange={(e) => {
             setFullName(e.target.value);
           }}
           placeholder="Student Name"
         />
         <input
+          value={phone}
           onChange={(e) => {
             setPhone(e.target.value);
           }}
           placeholder="Phone Number"
         />
         <input
+          value={email}
           onChange={(e) => {
             setEmail(e.target.value);
           }}
           placeholder="Email"
         />
         <input
+          value={address}
           onChange={(e) => {
             setAddress(e.target.value);
           }}
           placeholder="Full Address"
         />
         <select
+          disabled={location.state}
+          value={courseId}
           onChange={(e) => {
             setCourseId(e.target.value);
           }}
@@ -115,7 +177,7 @@ function AddStudent() {
           ))}
         </select>
 
-        <input required onChange={fileHandler} type="file" />
+        <input required={!location.state} onChange={fileHandler} type="file" />
         {imageUrl && (
           <img alt="your logo" className="your-logo" src={imageUrl} />
         )}

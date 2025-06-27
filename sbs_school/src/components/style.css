@@ -364,3 +364,62 @@ th {
   display: flex;
   gap: 10px;
 }
+
+/* --------------student detail ------------- */
+
+.student-detail-main-wrapper {
+  width: 100%;
+  height: 80vh;
+  /* background-color: #f65164; */
+}
+
+.student-detail-wrapper {
+  width: 100%;
+  height: 30vh;
+  /* background-color: green; */
+}
+
+.fee-detail-wrapper {
+  width: 100%;
+  height: 40vh;
+  background-color: yellow;
+  overflow: auto;
+  padding: 10px;
+}
+
+.student-detail-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 10vh;
+  align-items: center;
+}
+
+.sd-btn-container {
+  width: 30%;
+  display: flex;
+  gap: 2%;
+  height: 5vh;
+}
+
+.sd-detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10%;
+}
+
+.sd-detail img {
+  height: 200px;
+  width: 200px;
+  margin: 5px;
+  border-radius: 50%;
+  box-shadow: 5px 5px 10px;
+}
+
+.payment-history-title {
+  font-size: 20px;
+  color: #f65164;
+  margin-top: 8vh;
+  margin-left: 14px;
+}

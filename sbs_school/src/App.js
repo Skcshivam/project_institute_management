@@ -32,6 +32,7 @@ const myRouter = createBrowserRouter([
       { path: "payment-history", Component: PaymentHistory },
       { path: "course-detail/:id", Component: CourseDetail },
       { path: "update-course/:id", Component: AddCourses },
+      { path: "update-student/:id", Component: AddStudent },
       { path: "student-detail/:id", Component: StudentDetail },
     ],
   },

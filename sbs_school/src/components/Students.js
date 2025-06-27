@@ -1,9 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+// import Course from "../../../API/model/Course";
 
 function Students() {
+  // const params = useParams();
   const [studentList, setStudentList] = useState([]);
+
+  const Navigate = useNavigate();
 
   useEffect(() => {
     getStudentList();
@@ -18,7 +23,7 @@ function Students() {
       })
       .then((res) => {
         console.log(res.data);
-        setStudentList(res.data.Student);
+        setStudentList(res.data.students);
       })
       .catch((err) => {
         console.log(err);
@@ -40,7 +45,13 @@ function Students() {
             </thead>
             <tbody>
               {studentList.map((student) => (
-                <tr className="student-row" key={student._id}>
+                <tr
+                  onClick={() => {
+                    Navigate("/dashboard/student-detail/" + student._id);
+                  }}
+                  className="student-row"
+                  key={student._id}
+                >
                   <td>
                     <img
                       className="student-profile-pic"
