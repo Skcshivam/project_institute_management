@@ -7,6 +7,7 @@ const Student = require("../model/Student");
 const Course = require("../model/Course");
 const cloudinary = require("cloudinary").v2;
 const Fee = require("../model/Fee");
+// const Course = require("../model/Course");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -48,28 +49,16 @@ router.post("/add-student", checkAuth, (req, res) => {
 });
 
 /// Get all own students
-router.get("/student-detail/:id", checkAuth, (req, res) => {
+router.get("/all-students", checkAuth, (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
   const verify = jwt.verify(token, "sbs online classes 123");
 
-  Student.findById(req.params.id)
+  Student.find({ uId: verify.uId })
     .select("_id uId fullName phone email address courseId imageUrl imageId")
     .then((result) => {
-      Fee.find({
-        uId: verify.uId,
-        courseId: result.courseId,
-        phone: result.phone,
-      })
-        .then((feeData) => {
-          res.status(200).json({
-            studentDetail: result,
-            feeDetail: feeData,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).json({ error: err });
-        });
+      res.status(200).json({
+        students: result,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -91,26 +80,27 @@ router.get("/student-detail/:id", checkAuth, (req, res) => {
         phone: result.phone,
       })
         .then((feeData) => {
-          res.status(200).json({
-            studentDetail: result,
-            feeDetail: feeData,
-          });
+          Course.findById(result.courseId)
+            .then((courseDetail) => {
+              res.status(200).json({
+                studentDetail: result,
+                feeDetail: feeData,
+                courseDetail: courseDetail,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json({ error: err });
+            });
         })
         .catch((err) => {
           console.log(err);
-          res.status(500).json({
-            error: err,
-          });
+          res.status(500).json({ error: err });
         });
-      res.status(200).json({
-        Student: result,
-      });
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({
-        error: err,
-      });
+      res.status(500).json({ error: err });
     });
 });
 
